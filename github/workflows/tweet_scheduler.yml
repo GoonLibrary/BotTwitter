@@ -1,0 +1,54 @@
+name: Tweet GIF Bot
+
+on:
+  schedule:
+    # Ejecuta cada 12 horas (aprox. a las 00:00 y 12:00 UTC)
+    # Puedes ajustar el '0' si quieres una hora diferente (ej '30 */12 * * *' para :30)
+    - cron: '0 */12 * * *'
+  workflow_dispatch: # Permite ejecución manual desde la pestaña Actions
+
+jobs:
+  tweet_gif:
+    runs-on: ubuntu-latest
+    # Permisos necesarios para que la action pueda hacer commit/push al repo
+    permissions:
+      contents: write
+    steps:
+      # 1. Descargar el código del repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Configurar Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # O la versión que necesites
+
+      # 3. Instalar dependencias desde requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # 4. Ejecutar el script Python del bot
+      - name: Run Tweet Script
+        env:
+          # Pasar los secretos como variables de entorno al script
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+        # Asegúrate de que la ruta al script es correcta
+        run: python twitter_gif_bot.py
+
+      # 5. Hacer commit y push del archivo de estado actualizado
+      - name: Commit and push state file
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # Añadir el archivo de estado específico
+          git add state/next_gif_index.txt
+          # Commitear solo si hubo cambios en el archivo añadido
+          git diff --staged --quiet || git commit -m "Update next GIF index"
+          # Empujar los cambios al repositorio
+          git push
