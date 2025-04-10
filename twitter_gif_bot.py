@@ -151,7 +151,7 @@ def post_gif_from_temp_file(client_v2, api_v1):
         logging.info(f"Publicando tweet (v2) con Media ID: {media_id} y hashtags...")
         # Volver a comprobar media_id por si acaso
         if media_id:
-            tweet_text = "#GOON #GOONER #GOONETTE #PORN #CNC #FREEUSE #GOONED" # Tus hashtags
+            tweet_text = "#GOON #GOONER #GOONETTE #FREEUSE #GOONED" # Tus hashtags
             tweet_response = client_v2.create_tweet(
                 text=tweet_text,
                 media_ids=[media_id]
