@@ -122,7 +122,7 @@ def post_gif_from_temp_file(client_v2, api_v1):
         logging.info(f"Publicando tweet (v2) con Media ID: {media_id} y hashtags originales...")
         if media_id:
             # --- ¡CAMBIO AQUÍ! Hashtags originales ---
-            tweet_text = "#GOON #GOONER #GOONETTE #PORN #CNC #FREEUSE #GOONED"
+            tweet_text = "#GOON #GOONER #GOONETTE #PORN #CNC #FREEUSE #GOONED #CHUDAI #BBC #BWC #LESBIAN #ROUGH"
             tweet_response = client_v2.create_tweet(text=tweet_text, media_ids=[media_id])
             logging.info(f"Tweet publicado (v2)! ID: {tweet_response.data['id']}")
             next_index = (current_index + 1) % TOTAL_GIF_COUNT
